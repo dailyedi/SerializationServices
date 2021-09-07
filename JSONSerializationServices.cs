@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Xml.Serialization;
+
 using Newtonsoft.Json;
 
 namespace SerializationServices
@@ -16,10 +18,10 @@ namespace SerializationServices
         public static void SerializeToFile<T>(T dataToSerialize, string filePath) =>
             File.WriteAllText(filePath, JsonConvert.SerializeObject(dataToSerialize));
 
-        public static void SerializeToStream<T>(T dataToSerialize, StreamWriter sw) => 
+        public static void SerializeToStream<T>(T dataToSerialize, StreamWriter sw) =>
             sw.Write(JsonConvert.SerializeObject(dataToSerialize));
 
-        public static async void SerializeToStreamAsync<T>(T dataToSerialize, StreamWriter sw) => 
+        public static async void SerializeToStreamAsync<T>(T dataToSerialize, StreamWriter sw) =>
             await sw.WriteAsync(JsonConvert.SerializeObject(dataToSerialize));
 
         public static void SerializeToStream<T>(T dataToSerialize, MemoryStream ms)
@@ -33,6 +35,8 @@ namespace SerializationServices
             using (var sw = new StreamWriter(ms))
                 await sw.WriteAsync(JsonConvert.SerializeObject(dataToSerialize));
         }
+
+        public static string Serialize<T>(T dataToSerialize) => JsonConvert.SerializeObject(dataToSerialize);
 
         /// <summary>
         /// Deserializes the data in the XML file into an object
@@ -63,6 +67,18 @@ namespace SerializationServices
             try
             {
                 return new JsonSerializer().Deserialize<T>(jsonTextReader);
+            }
+            catch
+            {
+                return Activator.CreateInstance<T>();
+            }
+        }
+
+        public static T Deserialize<T>(string str)
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(str);
             }
             catch
             {

@@ -31,6 +31,15 @@ namespace SerializationServices
             writer.Close();
         }
 
+        public static string Serialize<T>(T dataToSerialize)
+        {
+            using (var tw = new StringWriter())
+            {
+                new XmlSerializer(typeof(T)).Serialize(tw, dataToSerialize);
+                return tw.ToString();
+            }
+        }
+
         /// <summary>
         /// Deserializes the data in the XML file into an object
         /// </summary>
@@ -41,7 +50,7 @@ namespace SerializationServices
         {
             try
             {
-                using (Stream stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+                using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
                     return (T)(new XmlSerializer(typeof(T))).Deserialize(stream);
             }
             catch
@@ -55,6 +64,19 @@ namespace SerializationServices
             try
             {
                 return (T)(new XmlSerializer(typeof(T))).Deserialize(st);
+            }
+            catch
+            {
+                return Activator.CreateInstance<T>();
+            }
+        }
+
+        public static T Deserialize<T>(string str)
+        {
+            try
+            {
+                using (var reader = new StringReader(str))
+                    return (T)(new XmlSerializer(typeof(T))).Deserialize(reader);
             }
             catch
             {
