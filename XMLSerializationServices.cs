@@ -3,10 +3,8 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using Formatting = System.Xml.Formatting;
 
-// ReSharper disable once CheckNamespace
-namespace SerializationServices.XML
+namespace SerializationServices
 {
     public static class XMLSerializationServices
     {
@@ -64,9 +62,4 @@ namespace SerializationServices.XML
             }
         }
     }
-}
-
-// ReSharper disable once CheckNamespace
-namespace SerializationServices.JSON
-{
 }

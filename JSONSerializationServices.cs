@@ -2,7 +2,7 @@
 using System.IO;
 using Newtonsoft.Json;
 
-namespace SerializationServices.JSON
+namespace SerializationServices
 {
     public static class JSONSerializationServices
     {
